@@ -1,0 +1,36 @@
+=encoding utf8
+
+=head1 NAME
+
+Time::Piece::Sketchy::Japanese - 日本語であいまいな日時指定をするためのモジュール
+
+=head1 SYNOPSIS
+
+  use Time::Piece::Sketchy::Japanese;
+  my $t = localtime;
+  print $t->sketchy( '再来週の水曜日' )->strftime( '%Y-%m-%d %H:%M:%S' );
+
+=head1 DESCRIPTION
+
+Time::Piece::Sketchy::Japanese は Time::Piece のサブクラスです。
+
+=head1 METHODS
+
+=head2 sketchy
+
+日本語での日時指定を渡すと、それにマッチした日時の Time::Piece オブジェクトを返します。
+
+=head1 AUTHOR
+
+satoshi azuma E<lt>ytnobody at gmail dot comE<gt>
+
+=head1 SEE ALSO
+
+Time::Piece
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
