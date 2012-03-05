@@ -8,7 +8,7 @@ Time::Piece::Sketchy::Japanese - 日本語であいまいな日時指定をす�
 
   use Time::Piece::Sketchy::Japanese;
   my $t = localtime;
-  print $t->sketchy( '再来週の水曜日' )->strftime( '%Y-%m-%d %H:%M:%S' );
+  print $t->sketchy( '再来週の水曜日の丑寅の刻' )->strftime( '%Y-%m-%d %H:%M:%S' );
 
 =head1 DESCRIPTION
 
