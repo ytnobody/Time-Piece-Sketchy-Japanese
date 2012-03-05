@@ -237,4 +237,22 @@ subtest before_sunset => sub {
     }
 };
 
+subtest trad_style => sub {
+    my @zodiacs = ( qw( 子 子丑 丑 丑寅 寅 寅卯 卯 卯辰 辰 辰巳 巳 巳午 午 午未 未 未申 申 申酉 酉 酉戌 戌 戌亥 亥 亥子 ) );
+    for my $hour ( 0 .. $#zodiacs ) {
+        my $zodiac = $zodiacs[$hour] ;
+        my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d '. sprintf( '%02d', $hour ) .':00:00'), '%Y-%m-%d %H:%M:%S' );
+        my $pattern = $zodiac. 'の刻';
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest mixed => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( '2012-02-29 03:00:00', '%Y-%m-%d %H:%M:%S' );
+    my $pattern = '再来週の水曜日の丑寅の刻';
+    my $t1 = $t->sketchy( $pattern );
+    ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+};
+
 done_testing;
