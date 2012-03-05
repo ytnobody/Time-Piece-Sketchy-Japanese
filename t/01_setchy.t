@@ -181,4 +181,60 @@ subtest two_week_ahead => sub {
     }
 };
 
+subtest early_morning => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 05:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 未明 明け方 夜明け 早朝 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest morning => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 07:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 朝 朝方 モーニング ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest before_daytime => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 11:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 昼前 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest daytime => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 12:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 昼 正午 お昼時 ランチタイム お昼 昼間 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest afternoon => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 14:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 日中 午後 アフタヌーン ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest before_sunset => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 16:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 夕方前 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest before_sunset => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 17:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 夕方 夕暮れ 夕刻 暮れ方 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
 done_testing;
