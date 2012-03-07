@@ -57,10 +57,16 @@ our @MAPPER = (
         my $res = $self - 0;
         $mode eq '前' ? $res->add_years( -1 * $years ) : $res->add_years( $years );
     },
-    qr/(.+の)?(明け方|夜明け|早朝|未明|朝方|朝|モーニング|昼前|お昼時|昼|昼間|正午|ランチタイム|お昼|日中|午後|アフタヌーン|夕方前|夕方|夕暮れ|夕刻|暮れ方|夕べ|ゆうべ|たそがれどき|宵|宵時|ディナータイム|夕飯時|晩|夜|夜半|イブニング|夜分|夜間|夜中|夜更け|深夜|ミッドナイト)/ => sub {
+    qr/(.+)?(午前|午後)/ => sub {
+        my $self = shift;
+        my $ampm = pop;
+        my $hour = $self->strftime( '%H' );
+        $ampm eq '午後' && $hour < 12 ? $self + 43200 : $self;
+    },
+    qr/(.+)?(明け方|夜明け|未明|朝方|朝|モーニング|昼前|お昼時|昼|昼間|正午|ランチタイム|お昼|日中|午後|アフタヌーン|夕方前|夕方|夕暮れ|夕刻|暮れ方|夕べ|ゆうべ|たそがれどき|宵|宵時|ディナータイム|夕飯時|晩|夜|夜半|イブニング|夜分|夜間|夜中|夜更け|深夜|ミッドナイト)/ => sub {
         my $self = shift;
         my $spec = pop;
-        if ( $spec =~ /^(明け方|夜明け|早朝|未明)$/ ) {
+        if ( $spec =~ /^(明け方|夜明け|未明)$/ ) {
             return __PACKAGE__->strptime( $self->strftime( '%Y-%m-%d 05:00:00' ), '%Y-%m-%d %H:%M:%S' );
         }
         elsif ( $spec =~ /^(朝|朝方|モーニング)$/ ) {
@@ -113,7 +119,19 @@ our @MAPPER = (
         };
         my $hour = $mapper->{$zodiac};
         return __PACKAGE__->strptime( $self->strftime( '%Y-%m-%d '. sprintf( '%02d', $hour ) .':00:00' ), '%Y-%m-%d %H:%M:%S' );
-    }
+    },
+    qr/(午前|午後)?([\d零〇一二三四五六七八九十]{1,2})時([\d零〇一二三四五六七八九十]{1,2}分|半)?/ => sub {
+        my $self = shift;
+        my ( $ampm, $hour, $min ) = @_;
+        $ampm ||= '';
+        $min ||= 0;
+        $hour = sprintf( '%02d', ja2num( $hour ) ); 
+        $min =~ s/分$//;
+        $min = $min eq '半' ? 30 : $min;
+        $min = sprintf( '%02d', ja2num( $min ) || 0 );
+        my $res = Time::Piece->strptime( sprintf('%s %s:%s:00', $self->strftime('%Y-%m-%d'), $hour, $min ), '%Y-%m-%d %H:%M:%S' );
+        $ampm eq '午後' && $hour < 12 ? $res + 43200 : $res;
+    },
 );
 
 sub sketchy {

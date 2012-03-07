@@ -183,7 +183,7 @@ subtest two_week_ahead => sub {
 
 subtest early_morning => sub {
     my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 05:00:00'), '%Y-%m-%d %H:%M:%S' );
-    for my $pattern ( qw( 未明 明け方 夜明け 早朝 ) ) {
+    for my $pattern ( qw( 未明 明け方 夜明け ) ) {
         my $t1 = $t->sketchy( $pattern );
         ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
     }
@@ -248,9 +248,32 @@ subtest trad_style => sub {
     }
 };
 
+subtest standard_style => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 10:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 一〇時 10時 １０時 十時 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
+subtest standard_style_p_m_ => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( $t->strftime('%Y-%m-%d 22:00:00'), '%Y-%m-%d %H:%M:%S' );
+    for my $pattern ( qw( 午後一〇時 午後10時 午後１０時 午後十時 ) ) {
+        my $t1 = $t->sketchy( $pattern );
+        ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+    }
+};
+
 subtest mixed => sub {
     my $expected = Time::Piece::Sketchy::Japanese->strptime( '2012-02-29 03:00:00', '%Y-%m-%d %H:%M:%S' );
     my $pattern = '再来週の水曜日の丑寅の刻';
+    my $t1 = $t->sketchy( $pattern );
+    ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+};
+
+subtest mixed2 => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( '2012-02-25 18:30:00', '%Y-%m-%d %H:%M:%S' );
+    my $pattern = '来週土曜午後六時半';
     my $t1 = $t->sketchy( $pattern );
     ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
 };
