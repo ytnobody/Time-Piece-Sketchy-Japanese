@@ -1,0 +1,7 @@
+/Time-Piece-Sketchy-Japanese-*
+/.build
+/_build_params
+/Build
+!Build/
+!META.json
+!LICENSE
