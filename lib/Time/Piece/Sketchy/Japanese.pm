@@ -29,6 +29,24 @@ our @MAPPER = (
         my $gap = $self->day_of_week - $WEEKDAY{$wday};
         $self - ( 86400 * $gap );
     },
+    qr/(.+の)?(.+)秒(前|後)/ => sub {
+        my $self = shift;
+        my $mode = pop;
+        my $secs = ja2num( pop );
+        $mode eq '前' ? $self - $secs : $self + $secs;
+    },
+    qr/(.+の)?(.+)分(前|後)/ => sub {
+        my $self = shift;
+        my $mode = pop;
+        my $mins = ja2num( pop );
+        $mode eq '前' ? $self - ( 60 * $mins ) : $self + ( 60 * $mins );
+    },
+    qr/(.+の)?(.+)時間(前|後)/ => sub {
+        my $self = shift;
+        my $mode = pop;
+        my $hours = ja2num( pop );
+        $mode eq '前' ? $self - ( 3600 * $hours ) : $self + ( 3600 * $hours );
+    },
     qr/(.+の)?(.+)日(前|後)/ => sub {
         my $self = shift;
         my $mode = pop;

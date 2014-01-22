@@ -278,4 +278,11 @@ subtest mixed2 => sub {
     ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
 };
 
+subtest minutes_after => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( '2012-02-16 16:38:59', '%Y-%m-%d %H:%M:%S' );
+    my $pattern = '40分後';
+    my $t1 = $t->sketchy( $pattern );
+    ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+};
+
 done_testing;
