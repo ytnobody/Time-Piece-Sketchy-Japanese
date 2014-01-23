@@ -285,6 +285,13 @@ subtest minutes_after => sub {
     ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
 };
 
+subtest hours_after => sub {
+    my $expected = Time::Piece::Sketchy::Japanese->strptime( '2012-02-16 17:58:59', '%Y-%m-%d %H:%M:%S' );
+    my $pattern = '2時間後';
+    my $t1 = $t->sketchy( $pattern );
+    ok $t1 == $expected, "$pattern is ". $t1->strftime('%Y-%m-%d %H:%M:%S');
+};
+
 subtest spec_time => sub {
     my $expected = Time::Piece::Sketchy::Japanese->strptime( '2012-02-16 17:40:00', '%Y-%m-%d %H:%M:%S' );
     my $pattern = '17:40';

@@ -146,7 +146,7 @@ our @MAPPER = (
         my $hour = $mapper->{$zodiac};
         return __PACKAGE__->strptime( $self->strftime( '%Y-%m-%d '. sprintf( '%02d', $hour ) .':00:00' ), '%Y-%m-%d %H:%M:%S' );
     },
-    qr/(午前|午後)?([\d零〇一二三四五六七八九十]{1,2})時([\d零〇一二三四五六七八九十]{1,2}分|半)?/ => sub {
+    qr/(午前|午後)?([\d零〇一二三四五六七八九十]{1,2})時([\d零〇一二三四五六七八九十]{1,2}分|半)?(?!間)/ => sub {
         my $self = shift;
         my ( $ampm, $hour, $min ) = @_;
         $ampm ||= '';
@@ -168,6 +168,12 @@ sub sketchy {
         my $code = shift @mapper;
         if ($str && $regex) {
             if ( my @args = $str =~ $regex ) {
+use Data::Dumper;
+warn Dumper({
+    str => $str,
+    args => [@args],
+    regex => $regex,
+});
                 $self = $code->( $self, @args );
             }
         }
