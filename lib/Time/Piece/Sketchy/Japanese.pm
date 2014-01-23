@@ -29,6 +29,14 @@ our @MAPPER = (
         my $gap = $self->day_of_week - $WEEKDAY{$wday};
         $self - ( 86400 * $gap );
     },
+    qr/([0-9]{1,2}):([0-9]{2})(\:([0-9]{2}))?/ => sub {
+        my $self = shift;
+        my $mode = pop;
+        my ($hour, $min, $sec) = @_;
+        $sec ||= '00';
+        $sec =~ s/^://;
+        __PACKAGE__->strptime($self->strftime('%Y-%m-%d '."$hour:$min:$sec"), '%Y-%m-%d %H:%M:%S');
+    },
     qr/(.+の)?(.+)秒(前|後)/ => sub {
         my $self = shift;
         my $mode = pop;
@@ -158,8 +166,10 @@ sub sketchy {
     while ( @mapper ) {
         my $regex = shift @mapper;
         my $code = shift @mapper;
-        if ( my @args = $str =~ $regex ) {
-            $self = $code->( $self, @args );
+        if ($str && $regex) {
+            if ( my @args = $str =~ $regex ) {
+                $self = $code->( $self, @args );
+            }
         }
     }
     return $self;
