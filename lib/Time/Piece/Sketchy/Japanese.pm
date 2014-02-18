@@ -168,12 +168,6 @@ sub sketchy {
         my $code = shift @mapper;
         if ($str && $regex) {
             if ( my @args = $str =~ $regex ) {
-use Data::Dumper;
-warn Dumper({
-    str => $str,
-    args => [@args],
-    regex => $regex,
-});
                 $self = $code->( $self, @args );
             }
         }
